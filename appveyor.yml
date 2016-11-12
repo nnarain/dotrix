@@ -13,7 +13,7 @@ before_build:
   - set PATH=%PATH%;%QT_ROOT%\bin;"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN\amd64"
   - qmake --version
   - qtenv2.bat
-  - "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+  - 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat'
 
 build_script:
   - cd c:\projects\dotrix
