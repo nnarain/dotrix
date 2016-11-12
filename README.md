@@ -21,9 +21,9 @@ Installation
 Build
 -----
 
-This is a Qt 5 project. Easiest way to build is using `qmake` or the Qt Creator.
+Dotrix uses the Qt5 framework and is configured with CMake. It can be built from the Qt Creator or from the command line.
 
-For `qmake` build:
+For building from the command line, generate Makefiles for your build tool of choice
 
 ```bash
 cd path/to/source
