@@ -1,0 +1,18 @@
+#
+# Dotrix Build
+#
+# @author Natesh Narain <nnaraindev@gmail.com>
+#
+
+os: Visual Studio 2015
+
+clone_folder: c:\projects\dotrix
+
+before_build:
+  - set PATH=%PATH%;C:\Qt\5.7\msvc2015_64
+
+build:
+  - cd c:\projects\dotrix
+  - mkdir build && cd build
+  - qmake -makefile -o Makefile ..\dotrix.pro
+  - nmake
