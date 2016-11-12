@@ -11,7 +11,7 @@ clone_folder: c:\projects\dotrix
 before_build:
   - set PATH=%PATH%;C:\Qt\5.7\msvc2015_64
 
-build:
+build_script:
   - cd c:\projects\dotrix
   - mkdir build && cd build
   - qmake -makefile -o Makefile ..\dotrix.pro
