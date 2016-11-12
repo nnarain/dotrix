@@ -3,6 +3,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/g9ob1phjkog7xfh4?svg=true)](https://ci.appveyor.com/project/nnarain/dotrix)
 [![GitHub issues](https://img.shields.io/github/issues/nnarain/dotrix.svg)](https://github.com/nnarain/dotrix/issues)
 [![GitHub release](https://img.shields.io/github/release/nnarain/dotrix.svg)](https://github.com/nnarain/dotrix/releases)
+[![Documentation Status](https://readthedocs.org/projects/dotrix/badge/?version=latest)](http://dotrix.readthedocs.io/en/latest/?badge=latest)
 
 
 Gameboy Emulator UI using the [Gameboy Core library](https://github.com/nnarain/gameboy)

@@ -1,2 +1,5 @@
 build/*
 *.user
+
+# docs
+docs/_build/*
