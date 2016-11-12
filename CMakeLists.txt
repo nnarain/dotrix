@@ -21,6 +21,10 @@ find_package(Qt5Gui)
 
 get_target_property(QtCore_location Qt5::Core LOCATION)
 
+# version info
+include(version-config)
+generate_version_info()
+
 # Group UI files
 set(UI_FILES
     ui/mainwindow.ui
