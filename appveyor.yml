@@ -24,7 +24,7 @@ build_script:
   - nmake
 
 after_build:
-  - c:\projects\dotrix\build
+  - cd c:\projects\dotrix\build
   - nmake package
 
 artifacts:
