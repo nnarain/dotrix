@@ -11,8 +11,7 @@ Gameboy Emulator UI using the [Gameboy Core library](https://github.com/nnarain/
 Manual
 ------
 
-TODO:
-Read the online manual!
+[Read the online manual!](http://dotrix.readthedocs.io/en/latest/)
 
 Installation
 ------------
