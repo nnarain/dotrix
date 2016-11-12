@@ -13,9 +13,9 @@ macro(get_version)
 		OUTPUT_VARIABLE VERSION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
-	
+
 	string(REGEX REPLACE "^([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" VERSION_MAJOR "${VERSION}")
 	string(REGEX REPLACE "^[0-9]+\\.([0-9])+\\.[0-9]+" "\\1" VERSION_MINOR "${VERSION}")
 	string(REGEX REPLACE "^[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" VERSION_PATCH "${VERSION}")
-	
+
 endmacro(get_version)
