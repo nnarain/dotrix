@@ -3,3 +3,9 @@ build/*
 
 # docs
 docs/_build/*
+
+# CPack
+_CPack_Packages/*
+
+# binary
+*.exe
