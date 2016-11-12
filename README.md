@@ -26,9 +26,9 @@ This is a Qt 5 project. Easiest way to build is using `qmake` or the Qt Creator.
 For `qmake` build:
 
 ```bash
-cd /path/to/source
+cd path/to/source
 mkdir build && cd build
-qmake -makefile -o Makefile ../dotrix.pro
+cmake .. -G "NMake Makefiles"
 nmake
 ```
 
