@@ -15,3 +15,5 @@ For building with qmake, generate a Makefile and build with either make or nmake
 
 Installation
 ------------
+
+Check out the latest `releases <https://github.com/nnarain/dotrix/releases>`.
