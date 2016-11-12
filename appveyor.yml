@@ -8,6 +8,9 @@ os: Visual Studio 2015
 
 clone_folder: c:\projects\dotrix
 
+install:
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
+
 before_build:
   - set QT_ROOT=C:\Qt\5.7\msvc2015_64
   - set PATH=%PATH%;%QT_ROOT%\bin
