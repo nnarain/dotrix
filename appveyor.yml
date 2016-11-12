@@ -14,6 +14,8 @@ install:
 before_build:
   - set QT_ROOT=C:\Qt\5.7\msvc2015_64
   - set PATH=%PATH%;%QT_ROOT%\bin
+  - qmake --version
+  - nmake --version
 
 build_script:
   - cd c:\projects\dotrix
