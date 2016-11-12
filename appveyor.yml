@@ -6,7 +6,7 @@
 
 os: Visual Studio 2015
 platform:
-  - x64
+  - amd64
 
 clone_folder: c:\projects\dotrix
 
@@ -15,7 +15,7 @@ before_build:
   - set PATH=%PATH%;%QT_ROOT%\bin;"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN\amd64"
   - qmake --version
   - qtenv2.bat
-  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"'
+  - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
 
 build_script:
   - cd c:\projects\dotrix
