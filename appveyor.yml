@@ -11,14 +11,15 @@ platform:
 clone_folder: c:\projects\dotrix
 
 install:
-  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
+
 
 before_build:
   - set QT_ROOT=C:\Qt\5.7\msvc2015_64
   - set PATH=%PATH%;%QT_ROOT%\bin;"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN\amd64"
   - qmake --version
   - qtenv2.bat
-  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"'
+  - '"C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64'
+#  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"'
 
 build_script:
   - cd c:\projects\dotrix
