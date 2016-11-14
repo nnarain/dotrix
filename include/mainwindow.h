@@ -30,15 +30,21 @@ public:
 private slots:
 	void updateScreen();
 
+	/* Menu slots */
+
+	void openFile();
+
 private:
 	void closeEvent(QCloseEvent *event) override;
+
+	void initMenuActions();
 
 private:
     Ui::MainWindow *ui;
 
 	QTimer refresh_timer_;
 	Screen* screen_;
-	CoreUpdater* updater_;
+	CoreUpdater updater_;
 
     gb::GameboyCore gameboycore_;
 };
