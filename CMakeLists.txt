@@ -65,6 +65,8 @@ target_link_libraries(${PROJECT_NAME}
     ${GAMEBOYCORE_LIBRARIES}
 )
 
+add_dependencies(${PROJECT_NAME} version)
+
 # install targets and deps
 get_filename_component(QT_BIN ${QtCore_location} DIRECTORY)
 

@@ -4,12 +4,17 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "version.h"
+
 int main(int argc, char *argv[])
 {
+	std::string title = "Dotrix " + version::get();
+
 	try
 	{
 		QApplication a(argc, argv);
 		MainWindow w;
+		w.setWindowTitle(QString::fromStdString(title));
 		w.show();
 
 		return a.exec();
