@@ -27,7 +27,7 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen"/>
+    <addaction name="actionOpenRom"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -49,7 +49,7 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionOpen">
+  <action name="actionOpenRom">
    <property name="text">
     <string>Open</string>
    </property>

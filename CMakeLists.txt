@@ -7,7 +7,8 @@
 
 cmake_minimum_required(VERSION 2.8.11)
 
-set(CMAKE_MODULE_PATH ${CMAKE_PREFIX_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules")
 
 project(dotrix)
 
@@ -15,6 +16,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_STANDARD 14)
 
+# Qt Configuration
 find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5Gui)
@@ -34,14 +36,19 @@ qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 # Resource file
 qt5_add_resources(RESOURCE_FILES )
 
-#
+# GameboyCore config
+find_package(GameboyCore)
+
 include_directories(
     include/
+    ${GAMEBOYCORE_INCLUDE_DIR}
 )
 
 # group headers
 set(HEADERS
     include/mainwindow.h
+	include/screen.h
+	include/core_updater.h
 )
 
 add_executable(${PROJECT_NAME}
@@ -54,6 +61,8 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     Qt5::Widgets
+	Qt5::Gui
+    ${GAMEBOYCORE_LIBRARIES}
 )
 
 # install targets and deps
@@ -70,6 +79,7 @@ if(WIN32)
             ${QT_BIN}/Qt5Core.dll
             ${QT_BIN}/Qt5Widgets.dll
             ${QT_BIN}/Qt5Gui.dll
+            ${GAMEBOYCORE_BIN_DIR}/gameboycore.dll
         DESTINATION bin
     )
 endif(WIN32)
