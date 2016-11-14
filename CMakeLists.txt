@@ -47,6 +47,8 @@ include_directories(
 # group headers
 set(HEADERS
     include/mainwindow.h
+	include/screen.h
+	include/core_updater.h
 )
 
 add_executable(${PROJECT_NAME}
@@ -59,6 +61,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     Qt5::Widgets
+	Qt5::Gui
     ${GAMEBOYCORE_LIBRARIES}
 )
 

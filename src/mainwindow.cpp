@@ -4,26 +4,34 @@
 #include <QFile>
 #include <QPainter>
 #include <QRect>
+#include <QRectF>
+#include <QColor>
 
 #include <functional>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    canvas_(160, 144, QImage::Format_ARGB32)
+	refresh_timer_(this),
+	screen_(new Screen),
+	updater_(new CoreUpdater(gameboycore_))
 {
     ui->setupUi(this);
+
+	// setup screen. MainWindow now owns screen_
+	setCentralWidget(screen_);
+
+	// update screen at ~16 ms (60 Hz)
+	connect(&refresh_timer_, SIGNAL(timeout()), this, SLOT(updateScreen()));
+	refresh_timer_.start(16);
+
+	// core updater
+	connect(updater_, SIGNAL(finished()), updater_, SLOT(deleteLater()));
 }
 
-void MainWindow::paintEvent(QPaintEvent* event)
+void MainWindow::updateScreen()
 {
-    QPainter painter(this);
-    painter.drawRect(QRect(50, 50, 160, 144));
-}
-
-void MainWindow::gpuCallback(gb::GPU::Scanline scanline, int line)
-{
-
+	update();
 }
 
 void MainWindow::loadROM(const QString& filename)
@@ -33,6 +41,7 @@ void MainWindow::loadROM(const QString& filename)
     std::vector<uint8_t> buffer;
     buffer.resize(file.size());
 
+	file.open(QIODevice::ReadOnly);
     file.read((char*)&buffer[0], file.size());
 
     // load rom into the core
@@ -40,11 +49,23 @@ void MainWindow::loadROM(const QString& filename)
 
     gameboycore_.getGPU()->setRenderCallback(
         std::bind(
-            &MainWindow::gpuCallback,
-            this,
+            &Screen::gpuCallback,
+            screen_,
             std::placeholders::_1, std::placeholders::_2
         )
     );
+
+	updater_->start();
+
+	ui->statusBar->showMessage("Playing " + filename);
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+	updater_->stop();
+	updater_->wait();
+
+	QMainWindow::closeEvent(event);
 }
 
 MainWindow::~MainWindow()
