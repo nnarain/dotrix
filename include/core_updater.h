@@ -6,35 +6,62 @@
 
 #include <gameboycore/gameboycore.h>
 
-class CoreUpdater : public QThread
+#include <memory>
+
+class CoreUpdater
 {
 public:
-	Q_OBJECT
-
-public:
-	CoreUpdater(gb::GameboyCore& core) :
-		core_(core),
-		running_(false)
+	class Worker : public QThread
 	{
-	}
-
-	void run()
-	{
-		while (running_)
+	public:
+		Worker(gb::GameboyCore& core) : core_(core), running_(false)
 		{
-			core_.update(512);
 		}
+
+		void run()
+		{
+			while (running_)
+			{
+				core_.update(512);
+			}
+		}
+
+		void start()
+		{
+			running_ = true;
+			QThread::start();
+		}
+
+		void wait()
+		{
+			running_ = false;
+			QThread::wait();
+		}
+
+	private:
+		gb::GameboyCore& core_;
+		volatile bool running_;
+	};
+
+	CoreUpdater(gb::GameboyCore& core) :
+		core_(core)
+	{
 	}
 
 	void start()
 	{
-		running_ = true;
-		QThread::start();
+		worker_.reset(new Worker(core_));
+		worker_->start();
 	}
 
 	void stop()
 	{
-		running_ = false;
+		worker_->wait();
+	}
+
+	bool isRunning()
+	{
+		return worker_ && worker_->isRunning();
 	}
 
 	~CoreUpdater()
@@ -43,7 +70,7 @@ public:
 
 private:
 	gb::GameboyCore& core_;
-	volatile bool running_;
+	std::unique_ptr<Worker> worker_;
 };
 
 #endif // 

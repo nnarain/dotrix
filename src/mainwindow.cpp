@@ -2,10 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QFile>
-#include <QPainter>
-#include <QRect>
-#include <QRectF>
-#include <QColor>
+#include <QFileDialog>
 
 #include <functional>
 
@@ -14,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
 	refresh_timer_(this),
 	screen_(new Screen),
-	updater_(new CoreUpdater(gameboycore_))
+	updater_(gameboycore_)
 {
     ui->setupUi(this);
 
@@ -25,13 +22,40 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(&refresh_timer_, SIGNAL(timeout()), this, SLOT(updateScreen()));
 	refresh_timer_.start(16);
 
-	// core updater
-	connect(updater_, SIGNAL(finished()), updater_, SLOT(deleteLater()));
+	// initialize menu items
+	initMenuActions();
 }
 
 void MainWindow::updateScreen()
 {
 	update();
+}
+
+void MainWindow::openFile()
+{
+	auto was_running = false;
+
+	// if the core updater is running, stop it
+	if (updater_.isRunning())
+	{
+		updater_.stop();
+		was_running = true;
+	}
+
+	auto filename = QFileDialog::getOpenFileName(this, tr("Open ROM"), "", tr("ROM (*.gb)"));
+	
+	// check for content
+	auto valid_rom = false;
+	if (filename.size() > 1)
+	{
+		loadROM(filename);
+		valid_rom = true;
+	}
+
+	if (was_running || valid_rom)
+	{
+		updater_.start();
+	}
 }
 
 void MainWindow::loadROM(const QString& filename)
@@ -55,17 +79,19 @@ void MainWindow::loadROM(const QString& filename)
         )
     );
 
-	updater_->start();
-
-	ui->statusBar->showMessage("Playing " + filename);
+	ui->statusBar->showMessage("Loaded " + filename);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-	updater_->stop();
-	updater_->wait();
+	updater_.stop();
 
 	QMainWindow::closeEvent(event);
+}
+
+void MainWindow::initMenuActions()
+{
+	connect(ui->actionOpenRom, SIGNAL(triggered()), this, SLOT(openFile()));
 }
 
 MainWindow::~MainWindow()
