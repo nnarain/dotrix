@@ -21,6 +21,7 @@ find_path(GAMEBOYCORE_DIR
 set(GAMEBOYCORE_INCLUDE_DIR "${GAMEBOYCORE_DIR}/include")
 set(GAMEBOYCORE_LIBRARIES   "${GAMEBOYCORE_DIR}/lib/gameboycore.lib")
 set(GAMEBOYCORE_STATIC_LIB  "${GAMEBOYCORE_DIR}/lib/gameboycore-s.lib")
+set(GAMEBOYCORE_BIN_DIR     "${GAMEBOYCORE_DIR}/bin")
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
@@ -29,4 +30,5 @@ find_package_handle_standard_args(
 	GAMEBOYCORE_INCLUDE_DIR
     GAMEBOYCORE_LIBRARIES
     GAMEBOYCORE_STATIC_LIB
+    GAMEBOYCORE_BIN_DIR
 )

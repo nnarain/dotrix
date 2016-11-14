@@ -10,12 +10,21 @@ platform:
 
 clone_folder: c:\projects\dotrix
 
-before_build:
+init:
   - set QT_ROOT=C:\Qt\5.7\msvc2015_64
   - set PATH=%PATH%;%QT_ROOT%\bin;"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\BIN\amd64"
   - qmake --version
   - qtenv2.bat
   - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+
+install:
+  - git clone --depth=1 --branch=0.9.0 https://github.com/nnarain/gameboycore.git c:\tmp\gameboycore
+  - cd c:\tmp\gameboycore
+  - mkdir build && cd build
+  - cmake .. -DBUILD_TESTS="OFF" -DWITH_GUI="OFF" -DCMAKE_INSTALL_PREFIX=c:\libs\gameboycore
+  - msbuild gameboycore.sln /verbosity:quiet
+  - msbuild INSTALL.vcxproj /verbosity:quiet
+  - set PATH=%PATH%;c:\libs\gameboycore
 
 build_script:
   - cd c:\projects\dotrix

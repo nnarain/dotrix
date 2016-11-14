@@ -79,6 +79,7 @@ if(WIN32)
             ${QT_BIN}/Qt5Core.dll
             ${QT_BIN}/Qt5Widgets.dll
             ${QT_BIN}/Qt5Gui.dll
+            ${GAMEBOYCORE_BIN_DIR}/gameboycore.dll
         DESTINATION bin
     )
 endif(WIN32)
