@@ -49,6 +49,7 @@ set(HEADERS
     include/mainwindow.h
 	include/screen.h
 	include/core_updater.h
+	include/input.h
 )
 
 add_executable(${PROJECT_NAME}
