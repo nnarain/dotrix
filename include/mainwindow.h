@@ -5,9 +5,11 @@
 #include <QString>
 #include <QImage>
 #include <QTimer>
+#include <QKeyEvent>
 
 #include "screen.h"
 #include "core_updater.h"
+#include "input.h"
 
 #include <gameboycore/gameboycore.h>
 
@@ -35,7 +37,11 @@ private slots:
 	void openFile();
 
 private:
+	/* Window Events */
+
 	void closeEvent(QCloseEvent *event) override;
+	void keyPressEvent(QKeyEvent* event) override;
+	void keyReleaseEvent(QKeyEvent* event) override;
 
 	void initMenuActions();
 
@@ -45,6 +51,7 @@ private:
 	QTimer refresh_timer_;
 	Screen* screen_;
 	CoreUpdater updater_;
+	Input input_;
 
     gb::GameboyCore gameboycore_;
 };
