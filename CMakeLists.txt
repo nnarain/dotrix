@@ -49,6 +49,7 @@ set(HEADERS
     include/mainwindow.h
 	include/screen.h
 	include/core_updater.h
+	include/input.h
 )
 
 add_executable(${PROJECT_NAME}
@@ -64,6 +65,8 @@ target_link_libraries(${PROJECT_NAME}
 	Qt5::Gui
     ${GAMEBOYCORE_LIBRARIES}
 )
+
+add_dependencies(${PROJECT_NAME} version)
 
 # install targets and deps
 get_filename_component(QT_BIN ${QtCore_location} DIRECTORY)

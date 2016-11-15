@@ -7,8 +7,8 @@
 #include <functional>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
+	QMainWindow(parent),
+	ui(new Ui::MainWindow),
 	refresh_timer_(this),
 	screen_(new Screen),
 	updater_(gameboycore_)
@@ -79,6 +79,8 @@ void MainWindow::loadROM(const QString& filename)
         )
     );
 
+	input_.setJoypad(gameboycore_.getJoypad());
+
 	ui->statusBar->showMessage("Loaded " + filename);
 }
 
@@ -87,6 +89,16 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	updater_.stop();
 
 	QMainWindow::closeEvent(event);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+	input_.process(Input::State::PRESSED, event->key());
+}
+
+void MainWindow::keyReleaseEvent(QKeyEvent* event)
+{
+	input_.process(Input::State::RELEASED, event->key());
 }
 
 void MainWindow::initMenuActions()
