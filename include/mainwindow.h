@@ -54,6 +54,8 @@ private:
 	Screen* screen_;
 	CoreUpdater updater_;
 	Input input_;
+
+	QString save_file_name_;
 };
 
 

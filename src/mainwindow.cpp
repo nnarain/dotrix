@@ -3,6 +3,8 @@
 
 #include <QFile>
 #include <QFileDialog>
+#include <QFileInfo>
+#include <QDir>
 
 #include <functional>
 
@@ -12,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	refresh_timer_(this),
 	screen_(new Screen),
 	updater_(gameboycore_),
-	input_(gameboycore_.getJoypad())
+	input_(gameboycore_.getJoypad()),
+	save_file_name_("")
 {
     ui->setupUi(this);
 
@@ -63,14 +66,32 @@ void MainWindow::loadROM(const QString& filename)
 {
     // read rom file
     QFile file(filename);
-    std::vector<uint8_t> buffer;
-    buffer.resize(file.size());
+    std::vector<uint8_t> rom;
+    rom.resize(file.size());
 
 	file.open(QIODevice::ReadOnly);
-    file.read((char*)&buffer[0], file.size());
+    file.read((char*)&rom[0], file.size());
 
-    // load rom into the core
-    gameboycore_.loadROM(&buffer[0], buffer.size());
+	// load rom into the core
+	gameboycore_.loadROM(&rom[0], rom.size());
+
+	// Save file info
+	QFileInfo saveinfo(filename);
+	save_file_name_ = QDir::cleanPath(saveinfo.canonicalPath() + QDir::separator() + saveinfo.baseName() + ".sav");
+	QFile savefile(save_file_name_);
+
+	if (savefile.exists())
+	{
+		savefile.open(QIODevice::ReadOnly);
+		std::vector<uint8_t> ram;
+	
+		if (savefile.size() > 0)
+		{
+			ram.resize(savefile.size());
+			savefile.read((char*)&ram[0], ram.size());
+			gameboycore_.getMMU()->setBatteryRam(ram);
+		}
+	}
 
     gameboycore_.getGPU()->setRenderCallback(
         std::bind(
@@ -86,6 +107,16 @@ void MainWindow::loadROM(const QString& filename)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 	updater_.stop();
+
+	// save battery ram
+	if (save_file_name_ != "")
+	{
+		auto ram = gameboycore_.getMMU()->getBatteryRam();
+
+		QFile file(save_file_name_);
+		file.open(QIODevice::WriteOnly);
+		file.write((char*)&ram[0], ram.size());
+	}
 
 	QMainWindow::closeEvent(event);
 }
