@@ -56,7 +56,8 @@ public:
 
 	void stop()
 	{
-		worker_->wait();
+		if(worker_)
+			worker_->wait();
 	}
 
 	bool isRunning()
