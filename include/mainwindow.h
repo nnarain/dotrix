@@ -48,12 +48,12 @@ private:
 private:
     Ui::MainWindow *ui;
 
+	gb::GameboyCore gameboycore_;
+
 	QTimer refresh_timer_;
 	Screen* screen_;
 	CoreUpdater updater_;
 	Input input_;
-
-    gb::GameboyCore gameboycore_;
 };
 
 

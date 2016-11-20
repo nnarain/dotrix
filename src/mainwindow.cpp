@@ -11,7 +11,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow),
 	refresh_timer_(this),
 	screen_(new Screen),
-	updater_(gameboycore_)
+	updater_(gameboycore_),
+	input_(gameboycore_.getJoypad())
 {
     ui->setupUi(this);
 
@@ -78,8 +79,6 @@ void MainWindow::loadROM(const QString& filename)
             std::placeholders::_1, std::placeholders::_2
         )
     );
-
-	input_.setJoypad(gameboycore_.getJoypad());
 
 	ui->statusBar->showMessage("Loaded " + filename);
 }

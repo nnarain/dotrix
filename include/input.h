@@ -24,7 +24,7 @@ public:
 		PRESSED, RELEASED
 	};
 
-	Input() : joy_(nullptr)
+	Input(gb::Joy::Ptr& joy) : joy_(joy)
 	{
 		// TODO: read key map from file
 		keymap_.insert({ Qt::Key_W, gb::Joy::Key::UP });
@@ -49,17 +49,12 @@ public:
 			joy_->release(gbkey);
 	}
 
-	void setJoypad(gb::Joy::Ptr& joy)
-	{
-		joy_ = joy;
-	}
-
 	~Input()
 	{
 	}
 
 private:
-	gb::Joy::Ptr joy_;
+	gb::Joy::Ptr& joy_;
 	std::map<int, gb::Joy::Key> keymap_;
 };
 
