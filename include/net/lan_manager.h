@@ -16,17 +16,26 @@ class LanManager : public QObject
 {
 	Q_OBJECT
 
+signals:
+
+	void log(const QString&);
+
 public:
 
 	explicit LanManager(QObject* parent = nullptr) :
 		discover_server_(this)
 	{
-		discover_server_.serve();
 	}
 
 	~LanManager()
 	{
-		discover_server_.stop();
+	}
+
+public slots:
+
+	void startConnection()
+	{
+		emit log("Searching for Dotrix servers");
 	}
 
 private:

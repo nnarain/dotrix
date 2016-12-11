@@ -21,6 +21,9 @@ public:
 	explicit NetworkSettings(QWidget* parent = nullptr);
 	~NetworkSettings();
 
+public slots:
+
+
 private:
 	std::unique_ptr<Ui::NetworkSettings> ui_;
 

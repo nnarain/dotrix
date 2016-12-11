@@ -9,8 +9,13 @@ NetworkSettings::NetworkSettings(QWidget* parent) :
 {
 	ui_->setupUi(this);
 
-	// disable resize
+	// disable widgets
 	this->setWindowFlags(this->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
+	ui_->etOutput->setTextInteractionFlags(Qt::NoTextInteraction);
+
+	// connect
+	connect(ui_->bnConnect, SIGNAL(clicked()), lan_, SLOT(startConnection()));
+	connect(lan_, SIGNAL(log(const QString&)), ui_->etOutput, SLOT(append(const QString&)));
 }
 
 NetworkSettings::~NetworkSettings()

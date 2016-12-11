@@ -35,12 +35,10 @@ public:
 	{
 	}
 
-	void serve()
+	void start()
 	{
 		socket_->bind(QHostAddress::AnyIPv4, 11411);
 		connect(socket_, SIGNAL(readyRead()), this, SLOT(readyRead()));
-
-
 	}
 
 	void stop()
@@ -83,6 +81,8 @@ private:
 				return address.toString();
 			}
 		}
+
+		return QString();
 	}
 
 public slots:
