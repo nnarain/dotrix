@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QKeyEvent>
 
+#include "qgameboycore.h"
 #include "screen.h"
 #include "core_updater.h"
 #include "input.h"
@@ -48,7 +49,9 @@ private:
 private:
     Ui::MainWindow *ui;
 
-	gb::GameboyCore gameboycore_;
+//	gb::GameboyCore gameboycore_;
+
+	QGameboyCore gameboycore_;
 
 	QTimer refresh_timer_;
 	Screen* screen_;
