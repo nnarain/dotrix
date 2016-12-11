@@ -10,7 +10,7 @@
 
 #include <QObject>
 
-#include <memory>
+#include "net/discover_server.h"
 
 class LanManager : public QObject
 {
@@ -18,15 +18,19 @@ class LanManager : public QObject
 
 public:
 
-	explicit LanManager(QObject* parent = nullptr)
+	explicit LanManager(QObject* parent = nullptr) :
+		discover_server_(this)
 	{
+		discover_server_.serve();
 	}
 
 	~LanManager()
 	{
+		discover_server_.stop();
 	}
 
 private:
+	DiscoverServer discover_server_;
 
 };
 

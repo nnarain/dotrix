@@ -6,6 +6,8 @@
 
 #include "net/lan_manager.h"
 
+#include <memory>
+
 namespace Ui{
 	class NetworkSettings;
 }
