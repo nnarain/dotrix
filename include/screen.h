@@ -27,20 +27,6 @@ public:
 	{
 	}
 
-	/*
-	void gpuCallback(gb::GPU::Scanline scanline, int line)
-	{
-		auto x = 0;
-		for (const auto& pixel : scanline)
-		{
-			// create color from current pixel in scanline
-			QColor color(pixel.r, pixel.g, pixel.b);
-
-			image_.setPixelColor(x++, line, color);
-		}
-	}
-	*/
-
 public slots:
 
 	void update(gb::GPU::Scanline scanline, int line)

@@ -12,6 +12,8 @@
 #include <QString>
 #include <QFile>
 
+#include "core_updater.h"
+
 #include <gameboycore/gameboycore.h>
 
 #include <functional>
@@ -30,7 +32,8 @@ signals:
 
 public:
 
-	QGameboyCore()
+	QGameboyCore() : 
+		updater_(core_)
 	{
 		// register Core meta types
 		qRegisterMetaType < gb::GPU::Scanline >("gb::GPU::Scanline");
@@ -41,7 +44,7 @@ public:
 	}
 
 	/* Core Callbacks */
-
+private:
 	void gpuCallback(gb::GPU::Scanline s, int line)
 	{
 		emit scanline(s, line);
@@ -49,6 +52,7 @@ public:
 
 	/* Convience functions */
 
+public:
 	void setupCallbacks()
 	{
 		// GPU callback
@@ -97,7 +101,22 @@ public:
 		}
 	}
 
+	void start()
+	{
+		updater_.start();
+	}
+
+	void stop()
+	{
+		updater_.stop();
+	}
+
 	/* Accessors */
+
+	bool isRunning()
+	{
+		return updater_.isRunning();
+	}
 
 	gb::GameboyCore& getCore()
 	{
@@ -106,6 +125,7 @@ public:
 
 private:
 	gb::GameboyCore core_;
+	CoreUpdater updater_;
 };
 
 #endif // DOTRIX_QGAMEBOYCORE_H

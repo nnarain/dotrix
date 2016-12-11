@@ -13,14 +13,13 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui(new Ui::MainWindow),
 	refresh_timer_(this),
 	screen_(new Screen),
-	updater_(gameboycore_.getCore()),
-	input_(gameboycore_.getCore().getJoypad()),
+	input_(core_.getCore().getJoypad()),
 	save_file_name_("")
 {
     ui->setupUi(this);
 
 	// setup screen.
-	connect(&gameboycore_, SIGNAL(scanline(gb::GPU::Scanline, int)), screen_, SLOT(update(gb::GPU::Scanline, int)));
+	connect(&core_, SIGNAL(scanline(gb::GPU::Scanline, int)), screen_, SLOT(update(gb::GPU::Scanline, int)));
 	setCentralWidget(screen_);
 
 	// update screen at ~16 ms (60 Hz)
@@ -41,9 +40,9 @@ void MainWindow::openFile()
 	auto was_running = false;
 
 	// if the core updater is running, stop it
-	if (updater_.isRunning())
+	if (core_.isRunning())
 	{
-		updater_.stop();
+		core_.stop();
 		was_running = true;
 	}
 
@@ -59,7 +58,7 @@ void MainWindow::openFile()
 
 	if (was_running || valid_rom)
 	{
-		updater_.start();
+		core_.start();
 	}
 }
 
@@ -69,17 +68,17 @@ void MainWindow::loadROM(const QString& filename)
 	QFileInfo saveinfo(filename);
 	save_file_name_ = QDir::cleanPath(saveinfo.canonicalPath() + QDir::separator() + saveinfo.baseName() + ".sav");
 
-	gameboycore_.load(filename, save_file_name_);
-	gameboycore_.setupCallbacks();
+	core_.load(filename, save_file_name_);
+	core_.setupCallbacks();
 
 	ui->statusBar->showMessage("Loaded " + filename);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-	updater_.stop();
+	core_.stop();
 
-	gameboycore_.save(save_file_name_);
+	core_.save(save_file_name_);
 
 	QMainWindow::closeEvent(event);
 }

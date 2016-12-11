@@ -51,11 +51,10 @@ private:
 
 //	gb::GameboyCore gameboycore_;
 
-	QGameboyCore gameboycore_;
+	QGameboyCore core_;
 
 	QTimer refresh_timer_;
 	Screen* screen_;
-	CoreUpdater updater_;
 	Input input_;
 
 	QString save_file_name_;
