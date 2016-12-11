@@ -12,10 +12,6 @@
 #include "core_updater.h"
 #include "input.h"
 
-#include <gameboycore/gameboycore.h>
-
-#include <thread>
-
 namespace Ui {
 class MainWindow;
 }
@@ -47,9 +43,7 @@ private:
 	void initMenuActions();
 
 private:
-    Ui::MainWindow *ui;
-
-//	gb::GameboyCore gameboycore_;
+	Ui::MainWindow *ui;
 
 	QGameboyCore core_;
 
