@@ -11,7 +11,7 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	network_settings_(std::make_unique<NetworkSettings>()),
+	network_settings_(new NetworkSettings(this)),
 	refresh_timer_(this),
 	screen_(new Screen),
 	input_(core_.getCore().getJoypad()),
@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-	// setup screen.
+	// setup screen
 	connect(&core_, SIGNAL(scanline(gb::GPU::Scanline, int)), screen_, SLOT(update(gb::GPU::Scanline, int)));
 	setCentralWidget(screen_);
 
@@ -99,7 +99,7 @@ void MainWindow::initMenuActions()
 	connect(ui->actionOpenRom, SIGNAL(triggered()), this, SLOT(openFile()));
 
 	// dialogs
-	connect(ui->actionNetwork, SIGNAL(triggered()), network_settings_.get(), SLOT(show()));
+	connect(ui->actionNetwork, SIGNAL(triggered()), network_settings_, SLOT(show()));
 }
 
 MainWindow::~MainWindow()

@@ -4,7 +4,8 @@
 
 NetworkSettings::NetworkSettings(QWidget* parent) :
 	QDialog(parent),
-	ui_(new Ui::NetworkSettings)
+	ui_(new Ui::NetworkSettings),
+	lan_(new LanManager(this))
 {
 	ui_->setupUi(this);
 

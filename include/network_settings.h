@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QDialog>
 
-#include <memory>
+#include "net/lan_manager.h"
 
 namespace Ui{
 	class NetworkSettings;
@@ -21,6 +21,8 @@ public:
 
 private:
 	std::unique_ptr<Ui::NetworkSettings> ui_;
+
+	LanManager* lan_;
 };
 
 #endif // DOTRIX_NETWORK_SETTINGS_H

@@ -54,6 +54,8 @@ set(HEADERS
 	include/emu/qgameboycore.h
 	include/emu/core_updater.h
 	include/emu/input.h
+	
+	include/net/lan_manager.h
 )
 
 add_executable(${PROJECT_NAME}

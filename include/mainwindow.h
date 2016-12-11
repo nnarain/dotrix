@@ -48,7 +48,7 @@ private:
 
 	Ui::MainWindow *ui;
 
-	std::unique_ptr<NetworkSettings> network_settings_;
+	NetworkSettings* network_settings_;
 
 
 	QGameboyCore core_;
