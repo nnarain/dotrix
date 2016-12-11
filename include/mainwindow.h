@@ -7,13 +7,10 @@
 #include <QTimer>
 #include <QKeyEvent>
 
+#include "qgameboycore.h"
 #include "screen.h"
 #include "core_updater.h"
 #include "input.h"
-
-#include <gameboycore/gameboycore.h>
-
-#include <thread>
 
 namespace Ui {
 class MainWindow;
@@ -46,13 +43,12 @@ private:
 	void initMenuActions();
 
 private:
-    Ui::MainWindow *ui;
+	Ui::MainWindow *ui;
 
-	gb::GameboyCore gameboycore_;
+	QGameboyCore core_;
 
 	QTimer refresh_timer_;
 	Screen* screen_;
-	CoreUpdater updater_;
 	Input input_;
 
 	QString save_file_name_;

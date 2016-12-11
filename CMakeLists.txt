@@ -50,6 +50,7 @@ set(HEADERS
 	include/screen.h
 	include/core_updater.h
 	include/input.h
+	include/qgameboycore.h
 )
 
 add_executable(${PROJECT_NAME}
