@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QDialog>
 
+#include <memory>
+
 namespace Ui{
 	class NetworkSettings;
 }
@@ -18,7 +20,7 @@ public:
 	~NetworkSettings();
 
 private:
-	Ui::NetworkSettings* ui_;
+	std::unique_ptr<Ui::NetworkSettings> ui_;
 };
 
 #endif // DOTRIX_NETWORK_SETTINGS_H

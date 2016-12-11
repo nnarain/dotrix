@@ -34,6 +34,19 @@
     <attribute name="title">
      <string>WAN</string>
     </attribute>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>150</y>
+       <width>81</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Not Implemented</string>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>

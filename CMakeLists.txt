@@ -50,9 +50,10 @@ set(HEADERS
     include/mainwindow.h
 	include/network_settings.h
 	include/screen.h
-	include/core_updater.h
-	include/input.h
-	include/qgameboycore.h
+	
+	include/emu/qgameboycore.h
+	include/emu/core_updater.h
+	include/emu/input.h
 )
 
 add_executable(${PROJECT_NAME}

@@ -7,12 +7,11 @@
 #include <QTimer>
 #include <QKeyEvent>
 
+#include "screen.h"
 #include "network_settings.h"
 
-#include "qgameboycore.h"
-#include "screen.h"
-#include "core_updater.h"
-#include "input.h"
+#include "emu/qgameboycore.h"
+#include "emu/input.h"
 
 namespace Ui {
 class MainWindow;

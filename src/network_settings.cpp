@@ -7,6 +7,9 @@ NetworkSettings::NetworkSettings(QWidget* parent) :
 	ui_(new Ui::NetworkSettings)
 {
 	ui_->setupUi(this);
+
+	// disable resize
+	this->setWindowFlags(this->windowFlags() | Qt::MSWindowsFixedSizeDialogHint);
 }
 
 NetworkSettings::~NetworkSettings()
