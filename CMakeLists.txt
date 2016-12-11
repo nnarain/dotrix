@@ -30,6 +30,7 @@ generate_version_info()
 # Group UI files
 set(UI_FILES
     ui/mainwindow.ui
+	ui/network_settings.ui
 )
 qt5_wrap_ui(UI_HEADERS ${UI_FILES})
 
@@ -47,6 +48,7 @@ include_directories(
 # group headers
 set(HEADERS
     include/mainwindow.h
+	include/network_settings.h
 	include/screen.h
 	include/core_updater.h
 	include/input.h
@@ -58,6 +60,7 @@ add_executable(${PROJECT_NAME}
     ${HEADERS}
     src/main.cpp
     src/mainwindow.cpp
+	src/network_settings.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

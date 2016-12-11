@@ -7,6 +7,8 @@
 #include <QTimer>
 #include <QKeyEvent>
 
+#include "network_settings.h"
+
 #include "qgameboycore.h"
 #include "screen.h"
 #include "core_updater.h"
@@ -43,7 +45,12 @@ private:
 	void initMenuActions();
 
 private:
+	/* UI */
+
 	Ui::MainWindow *ui;
+
+	std::unique_ptr<NetworkSettings> network_settings_;
+
 
 	QGameboyCore core_;
 

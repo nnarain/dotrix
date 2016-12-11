@@ -11,6 +11,7 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
+	network_settings_(std::make_unique<NetworkSettings>()),
 	refresh_timer_(this),
 	screen_(new Screen),
 	input_(core_.getCore().getJoypad()),
@@ -96,6 +97,9 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
 void MainWindow::initMenuActions()
 {
 	connect(ui->actionOpenRom, SIGNAL(triggered()), this, SLOT(openFile()));
+
+	// dialogs
+	connect(ui->actionNetwork, SIGNAL(triggered()), network_settings_.get(), SLOT(show()));
 }
 
 MainWindow::~MainWindow()
