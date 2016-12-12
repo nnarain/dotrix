@@ -15,7 +15,9 @@ NetworkSettings::NetworkSettings(QWidget* parent) :
 
 	// connect
 	connect(ui_->bnConnect, SIGNAL(clicked()), lan_, SLOT(startConnection()));
+
 	connect(lan_, SIGNAL(log(const QString&)), ui_->etOutput, SLOT(append(const QString&)));
+	connect(lan_->getDiscoverClient(), SIGNAL(log(const QString&)), ui_->etOutput, SLOT(append(const QString&)));
 }
 
 NetworkSettings::~NetworkSettings()
