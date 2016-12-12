@@ -20,6 +20,7 @@ set(CMAKE_CXX_STANDARD 14)
 find_package(Qt5Core)
 find_package(Qt5Widgets)
 find_package(Qt5Gui)
+FIND_PACKAGE(Qt5Network)
 
 get_target_property(QtCore_location Qt5::Core LOCATION)
 
@@ -56,6 +57,8 @@ set(HEADERS
 	include/emu/input.h
 	
 	include/net/lan_manager.h
+	include/net/discover_server.h
+	include/net/discover_client.h
 )
 
 add_executable(${PROJECT_NAME}
@@ -70,6 +73,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     Qt5::Widgets
 	Qt5::Gui
+	Qt5::Network
     ${GAMEBOYCORE_LIBRARIES}
 )
 
@@ -89,6 +93,7 @@ if(WIN32)
             ${QT_BIN}/Qt5Core.dll
             ${QT_BIN}/Qt5Widgets.dll
             ${QT_BIN}/Qt5Gui.dll
+			${QT_BIN}/Qt5Network.dll
             ${GAMEBOYCORE_BIN_DIR}/gameboycore.dll
         DESTINATION bin
     )

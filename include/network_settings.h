@@ -6,6 +6,8 @@
 
 #include "net/lan_manager.h"
 
+#include <memory>
+
 namespace Ui{
 	class NetworkSettings;
 }
@@ -18,6 +20,9 @@ public:
 
 	explicit NetworkSettings(QWidget* parent = nullptr);
 	~NetworkSettings();
+
+public slots:
+
 
 private:
 	std::unique_ptr<Ui::NetworkSettings> ui_;
