@@ -12,6 +12,10 @@
 
 #include "net/discover_server.h"
 #include "net/discover_client.h"
+#include "net/tcp_server.h"
+#include "net/tcp_client.h"
+
+#include <memory>
 
 class LanManager : public QObject
 {
@@ -49,14 +53,17 @@ public:
 
 public slots:
 
-	void serverFound(QHostAddress, quint16)
+	void serverFound(QHostAddress address, quint16 port)
 	{
+		// stop server discovery
 		discover_client_.stop();
+
+
 	}
 
 	void discoverTimeout()
 	{
-		emit log("Discovery has timed out... Switching to server ");
+		emit log("Discovery has timed out... Switching to server mode");
 
 		discover_client_.stop();
 		discover_server_.start();
@@ -73,6 +80,8 @@ private:
 	DiscoverServer discover_server_;
 	DiscoverClient discover_client_;
 
+	// object that provides signals and slots to communicate with a network
+	std::unique_ptr<QObject> net_;
 };
 
 #endif // DOTRIX_NET_LAN_MANGER_H

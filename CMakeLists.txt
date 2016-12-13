@@ -59,6 +59,8 @@ set(HEADERS
 	include/net/lan_manager.h
 	include/net/discover_server.h
 	include/net/discover_client.h
+	include/net/tcp_server.h
+	include/net/tcp_client.h
 )
 
 add_executable(${PROJECT_NAME}
