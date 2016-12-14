@@ -23,6 +23,7 @@ class LanManager : public QObject
 
 signals:
 
+	void interfaceReady(QObject*);
 	void log(const QString&);
 
 public:
@@ -35,7 +36,7 @@ public:
 		connect(&discover_client_, SIGNAL(serverFound(QHostAddress, quint16)), this, SLOT(serverFound(QHostAddress, quint16)));
 	}
 
-	~LanManager()
+	virtual ~LanManager()
 	{
 	}
 
@@ -58,15 +59,20 @@ public slots:
 		// stop server discovery
 		discover_client_.stop();
 
+		net_.reset(new TcpClient(address, port));
 
+		emit interfaceReady(net_.get());
 	}
 
 	void discoverTimeout()
 	{
-		emit log("Discovery has timed out... Switching to server mode");
+		emit log("Discovery has timed out...");
+		emit log("Switching to server mode");
 
 		discover_client_.stop();
 		discover_server_.start();
+
+		net_.reset(new TcpServer());
 	}
 
 	void startConnection()

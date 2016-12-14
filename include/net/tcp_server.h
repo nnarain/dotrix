@@ -31,9 +31,10 @@ public:
 		is_connected_(false)
 	{
 		connect(server_, SIGNAL(newConnection()), this, SLOT(newConnection()));
+		start();
 	}
 
-	~TcpServer()
+	virtual ~TcpServer()
 	{
 		if (server_->isListening())
 		{
@@ -41,11 +42,18 @@ public:
 		}
 	}
 
-	void start(const QHostAddress& address, quint16 port)
+	void start()
 	{
+		const QHostAddress address(getIpAddress());
+		quint16 port(11412);
+
 		if (!server_->listen(address, port))
 		{
 			qDebug() << "Could not bind to " << address << ":" << QString(port);
+		}
+		else
+		{
+			qDebug() << "TCP Server listening";
 		}
 	}
 
@@ -53,6 +61,8 @@ public slots:
 
 	void newConnection()
 	{
+		qDebug() << "Handling new connection";
+
 		// can only handle one connection at a time
 		if (is_connected_) return;
 
@@ -62,6 +72,10 @@ public slots:
 		connect(socket_, SIGNAL(disconnected()), this, SLOT(disconnected()));
 
 		is_connected_ = true;
+
+		QByteArray data;
+		data.append("Hello");
+		socket_->write(data);
 	}
 
 	void readyRead()
@@ -73,6 +87,25 @@ public slots:
 	{
 		is_connected_ = false;
 		socket_->deleteLater();
+	}
+
+private:
+
+	QString getIpAddress() const
+	{
+		auto addresses = QNetworkInterface::allAddresses();
+
+		for (auto iter = addresses.begin(); iter != addresses.end(); ++iter)
+		{
+			const auto address = *iter;
+
+			if (address.protocol() == QAbstractSocket::IPv4Protocol && !address.isLoopback())
+			{
+				return address.toString();
+			}
+		}
+
+		return QString();
 	}
 
 private:
