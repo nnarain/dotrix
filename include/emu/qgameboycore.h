@@ -69,7 +69,7 @@ public:
 		file.open(QIODevice::ReadOnly);
 		file.read((char*)&rom[0], file.size());
 
-		core_.loadROM(&rom[0], rom.size());
+		core_.loadROM(&rom[0], (uint32_t)rom.size());
 
 		QFile save_file(save_file_name);
 

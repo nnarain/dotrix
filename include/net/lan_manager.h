@@ -59,8 +59,13 @@ public slots:
 		// stop server discovery
 		discover_client_.stop();
 
-		net_.reset(new TcpClient(address, port));
+		net_ = std::make_unique<TcpClient>(address, port);
 
+		emit interfaceReady(net_.get());
+	}
+
+	void clientConnected()
+	{
 		emit interfaceReady(net_.get());
 	}
 
@@ -72,7 +77,8 @@ public slots:
 		discover_client_.stop();
 		discover_server_.start();
 
-		net_.reset(new TcpServer());
+		net_ = std::make_unique<TcpServer>();
+		connect(net_.get(), SIGNAL(clientConnected()), this, SLOT(clientConnected()));
 	}
 
 	void startConnection()

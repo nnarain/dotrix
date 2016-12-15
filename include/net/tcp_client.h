@@ -25,6 +25,7 @@ public:
 		socket_(new QTcpSocket(this))
 	{
 		connect(socket_, SIGNAL(disconnected()), this, SLOT(disconnected()));
+		connect(socket_, SIGNAL(readyRead()), this, SLOT(readyRead()));
 		start();
 	}
 
@@ -55,7 +56,6 @@ public slots:
 	void readyRead()
 	{
 		QByteArray data = socket_->readAll();
-		qDebug() << QString(data);
 	}
 
 	void disconnected()

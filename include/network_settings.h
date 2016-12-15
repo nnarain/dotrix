@@ -16,6 +16,10 @@ class NetworkSettings : public QDialog
 {
 	Q_OBJECT
 
+signals:
+
+	void interfaceReady(QObject*);
+
 public:
 
 	explicit NetworkSettings(QWidget* parent = nullptr);
@@ -23,6 +27,8 @@ public:
 
 public slots:
 
+
+	void interfaceReadySlot(QObject* net);
 
 private:
 	std::unique_ptr<Ui::NetworkSettings> ui_;

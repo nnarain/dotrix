@@ -20,6 +20,11 @@ NetworkSettings::NetworkSettings(QWidget* parent) :
 	connect(lan_->getDiscoverClient(), SIGNAL(log(const QString&)), ui_->etOutput, SLOT(append(const QString&)));
 }
 
+void NetworkSettings::interfaceReadySlot(QObject* net)
+{
+	emit interfaceReady(net);
+}
+
 NetworkSettings::~NetworkSettings()
 {
 }

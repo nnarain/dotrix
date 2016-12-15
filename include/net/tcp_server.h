@@ -18,9 +18,17 @@
 
 #include <QDebug>
 
+/**
+	\class TcpServer
+	\brief TCP server
+*/
 class TcpServer : public QObject
 {
 	Q_OBJECT
+
+signals:
+
+	void clientConnected();
 
 public:
 
@@ -73,9 +81,7 @@ public slots:
 
 		is_connected_ = true;
 
-		QByteArray data;
-		data.append("Hello");
-		socket_->write(data);
+		emit clientConnected();
 	}
 
 	void readyRead()
