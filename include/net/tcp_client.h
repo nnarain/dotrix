@@ -16,6 +16,10 @@ class TcpClient : public QObject
 {
 	Q_OBJECT
 
+signals:
+
+	void recieved(uint8_t);
+
 public:
 
 	TcpClient(QHostAddress addr, quint16 port, QObject* parent = nullptr) :
@@ -55,7 +59,13 @@ public slots:
 
 	void readyRead()
 	{
+		qDebug() << "C: server -> client";
+
 		QByteArray data = socket_->readAll();
+
+		auto byte = (uint8_t)data.at(0);
+
+		emit recieved(byte);
 	}
 
 	void disconnected()
@@ -63,6 +73,16 @@ public slots:
 		socket_->deleteLater();
 	}
 
+	void linkReady(uint8_t byte, gb::Link::Mode mode)
+	{
+		qDebug() << "C: client -> server";
+
+		QByteArray data;
+		data.append(byte);
+		data.append(static_cast<uint8_t>(mode));
+
+		socket_->write(data);
+	}
 
 private:
 	QTcpSocket* socket_;

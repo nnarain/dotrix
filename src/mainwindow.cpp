@@ -27,6 +27,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(&refresh_timer_, SIGNAL(timeout()), this, SLOT(updateScreen()));
 	refresh_timer_.start(16);
 
+	// network
+	connect(network_settings_, SIGNAL(interfaceReady(QObject*)), this, SLOT(networkInterfaceReady(QObject*)));
+
 	// initialize menu items
 	initMenuActions();
 }
@@ -92,6 +95,12 @@ void MainWindow::keyPressEvent(QKeyEvent* event)
 void MainWindow::keyReleaseEvent(QKeyEvent* event)
 {
 	input_.process(Input::State::RELEASED, event->key());
+}
+
+void MainWindow::networkInterfaceReady(QObject* obj)
+{
+	connect(&core_, SIGNAL(linkReady(uint8_t, gb::Link::Mode)), obj, SLOT(linkReady(uint8_t, gb::Link::Mode)));
+	connect(obj, SIGNAL(recieved(uint8_t)), &core_, SLOT(linkRecieve(uint8_t)));
 }
 
 void MainWindow::initMenuActions()
