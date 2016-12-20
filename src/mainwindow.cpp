@@ -11,20 +11,24 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
+	network_settings_(new NetworkSettings(this)),
 	refresh_timer_(this),
 	screen_(new Screen),
-	updater_(gameboycore_),
-	input_(gameboycore_.getJoypad()),
+	input_(core_.getCore().getJoypad()),
 	save_file_name_("")
 {
     ui->setupUi(this);
 
-	// setup screen. MainWindow now owns screen_
+	// setup screen
+	connect(&core_, SIGNAL(scanline(gb::GPU::Scanline, int)), screen_, SLOT(update(gb::GPU::Scanline, int)));
 	setCentralWidget(screen_);
 
 	// update screen at ~16 ms (60 Hz)
 	connect(&refresh_timer_, SIGNAL(timeout()), this, SLOT(updateScreen()));
 	refresh_timer_.start(16);
+
+	// network
+	connect(network_settings_, SIGNAL(interfaceReady(QObject*)), this, SLOT(networkInterfaceReady(QObject*)));
 
 	// initialize menu items
 	initMenuActions();
@@ -40,9 +44,9 @@ void MainWindow::openFile()
 	auto was_running = false;
 
 	// if the core updater is running, stop it
-	if (updater_.isRunning())
+	if (core_.isRunning())
 	{
-		updater_.stop();
+		core_.stop();
 		was_running = true;
 	}
 
@@ -58,65 +62,27 @@ void MainWindow::openFile()
 
 	if (was_running || valid_rom)
 	{
-		updater_.start();
+		core_.start();
 	}
 }
 
 void MainWindow::loadROM(const QString& filename)
 {
-    // read rom file
-    QFile file(filename);
-    std::vector<uint8_t> rom;
-    rom.resize(file.size());
-
-	file.open(QIODevice::ReadOnly);
-    file.read((char*)&rom[0], file.size());
-
-	// load rom into the core
-	gameboycore_.loadROM(&rom[0], rom.size());
-
 	// Save file info
 	QFileInfo saveinfo(filename);
 	save_file_name_ = QDir::cleanPath(saveinfo.canonicalPath() + QDir::separator() + saveinfo.baseName() + ".sav");
-	QFile savefile(save_file_name_);
 
-	if (savefile.exists())
-	{
-		savefile.open(QIODevice::ReadOnly);
-		std::vector<uint8_t> ram;
-	
-		if (savefile.size() > 0)
-		{
-			ram.resize(savefile.size());
-			savefile.read((char*)&ram[0], ram.size());
-			gameboycore_.getMMU()->setBatteryRam(ram);
-		}
-	}
-
-    gameboycore_.getGPU()->setRenderCallback(
-        std::bind(
-            &Screen::gpuCallback,
-            screen_,
-            std::placeholders::_1, std::placeholders::_2
-        )
-    );
+	core_.load(filename, save_file_name_);
+	core_.setupCallbacks();
 
 	ui->statusBar->showMessage("Loaded " + filename);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-	updater_.stop();
+	core_.stop();
 
-	// save battery ram
-	if (save_file_name_ != "")
-	{
-		auto ram = gameboycore_.getMMU()->getBatteryRam();
-
-		QFile file(save_file_name_);
-		file.open(QIODevice::WriteOnly);
-		file.write((char*)&ram[0], ram.size());
-	}
+	core_.save(save_file_name_);
 
 	QMainWindow::closeEvent(event);
 }
@@ -131,9 +97,18 @@ void MainWindow::keyReleaseEvent(QKeyEvent* event)
 	input_.process(Input::State::RELEASED, event->key());
 }
 
+void MainWindow::networkInterfaceReady(QObject* obj)
+{
+	connect(&core_, SIGNAL(linkReady(uint8_t, gb::Link::Mode)), obj, SLOT(linkReady(uint8_t, gb::Link::Mode)));
+	connect(obj, SIGNAL(recieved(uint8_t)), &core_, SLOT(linkRecieve(uint8_t)));
+}
+
 void MainWindow::initMenuActions()
 {
 	connect(ui->actionOpenRom, SIGNAL(triggered()), this, SLOT(openFile()));
+
+	// dialogs
+	connect(ui->actionNetwork, SIGNAL(triggered()), network_settings_, SLOT(show()));
 }
 
 MainWindow::~MainWindow()

@@ -16,6 +16,7 @@ class Screen : public QWidget
 {
 	Q_OBJECT
 
+
 public:
 	Screen() :
 		image_(160, 144, QImage::Format_ARGB32)
@@ -26,14 +27,14 @@ public:
 	{
 	}
 
-	void gpuCallback(gb::GPU::Scanline scanline, int line)
+public slots:
+
+	void update(gb::GPU::Scanline scanline, int line)
 	{
 		auto x = 0;
 		for (const auto& pixel : scanline)
 		{
-			// create color from current pixel in scanline
 			QColor color(pixel.r, pixel.g, pixel.b);
-
 			image_.setPixelColor(x++, line, color);
 		}
 	}

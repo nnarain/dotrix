@@ -1,3 +1,11 @@
+
+/**
+	\file mainwindow.h
+	\brief Where is all comes together
+	\author Natesh Narain
+	\date Dec 15 2016
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -8,12 +16,10 @@
 #include <QKeyEvent>
 
 #include "screen.h"
-#include "core_updater.h"
-#include "input.h"
+#include "network_settings.h"
 
-#include <gameboycore/gameboycore.h>
-
-#include <thread>
+#include "emu/qgameboycore.h"
+#include "emu/input.h"
 
 namespace Ui {
 class MainWindow;
@@ -32,6 +38,8 @@ public:
 private slots:
 	void updateScreen();
 
+	void networkInterfaceReady(QObject* obj);
+
 	/* Menu slots */
 
 	void openFile();
@@ -46,13 +54,17 @@ private:
 	void initMenuActions();
 
 private:
-    Ui::MainWindow *ui;
+	/* UI */
 
-	gb::GameboyCore gameboycore_;
+	Ui::MainWindow *ui;
+
+	NetworkSettings* network_settings_;
+
+
+	QGameboyCore core_;
 
 	QTimer refresh_timer_;
 	Screen* screen_;
-	CoreUpdater updater_;
 	Input input_;
 
 	QString save_file_name_;
