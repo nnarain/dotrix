@@ -59,8 +59,6 @@ public slots:
 
 	void readyRead()
 	{
-		qDebug() << "C: server -> client";
-
 		QByteArray data = socket_->readAll();
 
 		auto byte = (uint8_t)data.at(0);
@@ -75,8 +73,6 @@ public slots:
 
 	void linkReady(uint8_t byte, gb::Link::Mode mode)
 	{
-		qDebug() << "C: client -> server";
-
 		QByteArray data;
 		data.append(byte);
 		data.append(static_cast<uint8_t>(mode));

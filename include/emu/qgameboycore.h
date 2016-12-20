@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QString>
 #include <QFile>
+#include <QDebug>
 
 #include "core_updater.h"
 
@@ -26,7 +27,7 @@ class QGameboyCore : public QObject
 {
 	Q_OBJECT
 
-		signals :
+signals:
 
 	void scanline(gb::GPU::Scanline, int line);
 	void linkReady(uint8_t, gb::Link::Mode);
@@ -45,7 +46,7 @@ public:
 	{
 	}
 
-	public slots:
+public slots:
 
 	void linkRecieve(uint8_t byte)
 	{

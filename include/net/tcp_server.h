@@ -15,10 +15,12 @@
 #include <QHostAddress>
 #include <QString>
 #include <QByteArray>
-
-#include <gameboycore/link_cable.h>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <QDebug>
+
+#include <gameboycore/link_cable.h>
 
 /**
 	\class TcpServer
@@ -68,7 +70,7 @@ public:
 		}
 	}
 
-	public slots:
+public slots:
 
 	void newConnection()
 	{
@@ -89,12 +91,12 @@ public:
 
 	void readyRead()
 	{
-		qDebug() << "S: client <- server";
-
 		QByteArray data = socket_->readAll();
 
 		if (data.size() >= 2)
 		{
+			QMutexLocker lock(&cable_mutex_);
+
 			auto byte = (uint8_t)data.at(0);
 			auto mode = static_cast<gb::Link::Mode>(data.at(1));
 
@@ -110,6 +112,7 @@ public:
 
 	void linkReady(uint8_t byte, gb::Link::Mode mode)
 	{
+		QMutexLocker lock(&cable_mutex_);
 		cable_.link1ReadyCallback(byte, mode);
 	}
 
@@ -117,8 +120,6 @@ private:
 
 	void link2RecieveCallback(uint8_t byte)
 	{
-		qDebug() << "S: server -> client";
-
 		QByteArray data;
 		data.append(byte);
 
@@ -154,6 +155,7 @@ private:
 	bool is_connected_;
 
 	gb::LinkCable cable_;
+	QMutex cable_mutex_;
 };
 
 #endif // DOTRIX_NET_TCP_SERVER_H
