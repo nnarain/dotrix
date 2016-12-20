@@ -1,3 +1,11 @@
+
+/**
+	\file mainwindow.h
+	\brief Where is all comes together
+	\author Natesh Narain
+	\date Dec 15 2016
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -29,6 +37,8 @@ public:
 
 private slots:
 	void updateScreen();
+
+	void networkInterfaceReady(QObject* obj);
 
 	/* Menu slots */
 

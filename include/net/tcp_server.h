@@ -15,8 +15,12 @@
 #include <QHostAddress>
 #include <QString>
 #include <QByteArray>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <QDebug>
+
+#include <gameboycore/link_cable.h>
 
 /**
 	\class TcpServer
@@ -26,9 +30,11 @@ class TcpServer : public QObject
 {
 	Q_OBJECT
 
-signals:
+		signals :
 
 	void clientConnected();
+
+	void recieved(uint8_t);
 
 public:
 
@@ -40,6 +46,9 @@ public:
 	{
 		connect(server_, SIGNAL(newConnection()), this, SLOT(newConnection()));
 		start();
+
+		cable_.setLink1RecieveCallback(std::bind(&TcpServer::link1RecieveCallback, this, std::placeholders::_1));
+		cable_.setLink2RecieveCallback(std::bind(&TcpServer::link2RecieveCallback, this, std::placeholders::_1));
 	}
 
 	virtual ~TcpServer()
@@ -58,10 +67,6 @@ public:
 		if (!server_->listen(address, port))
 		{
 			qDebug() << "Could not bind to " << address << ":" << QString(port);
-		}
-		else
-		{
-			qDebug() << "TCP Server listening";
 		}
 	}
 
@@ -87,6 +92,16 @@ public slots:
 	void readyRead()
 	{
 		QByteArray data = socket_->readAll();
+
+		if (data.size() >= 2)
+		{
+			QMutexLocker lock(&cable_mutex_);
+
+			auto byte = (uint8_t)data.at(0);
+			auto mode = static_cast<gb::Link::Mode>(data.at(1));
+
+			cable_.link2ReadyCallback(byte, mode);
+		}
 	}
 
 	void disconnected()
@@ -95,7 +110,26 @@ public slots:
 		socket_->deleteLater();
 	}
 
+	void linkReady(uint8_t byte, gb::Link::Mode mode)
+	{
+		QMutexLocker lock(&cable_mutex_);
+		cable_.link1ReadyCallback(byte, mode);
+	}
+
 private:
+
+	void link2RecieveCallback(uint8_t byte)
+	{
+		QByteArray data;
+		data.append(byte);
+
+		socket_->write(data);
+	}
+
+	void link1RecieveCallback(uint8_t byte)
+	{
+		emit recieved(byte);
+	}
 
 	QString getIpAddress() const
 	{
@@ -119,6 +153,9 @@ private:
 	QTcpSocket* socket_;
 
 	bool is_connected_;
+
+	gb::LinkCable cable_;
+	QMutex cable_mutex_;
 };
 
 #endif // DOTRIX_NET_TCP_SERVER_H

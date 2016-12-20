@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QString>
 #include <QFile>
+#include <QDebug>
 
 #include "core_updater.h"
 
@@ -29,18 +30,27 @@ class QGameboyCore : public QObject
 signals:
 
 	void scanline(gb::GPU::Scanline, int line);
+	void linkReady(uint8_t, gb::Link::Mode);
 
 public:
 
-	QGameboyCore() : 
+	QGameboyCore() :
 		updater_(core_)
 	{
 		// register Core meta types
 		qRegisterMetaType < gb::GPU::Scanline >("gb::GPU::Scanline");
+		qRegisterMetaType < gb::Link::Mode >("gb::Link::Mode");
 	}
 
 	~QGameboyCore()
 	{
+	}
+
+public slots:
+
+	void linkRecieve(uint8_t byte)
+	{
+		core_.getLink()->recieve(byte);
 	}
 
 	/* Core Callbacks */
@@ -50,6 +60,11 @@ private:
 		emit scanline(s, line);
 	}
 
+	void linkCallback(uint8_t byte, gb::Link::Mode mode)
+	{
+		emit linkReady(byte, mode);
+	}
+
 	/* Convience functions */
 
 public:
@@ -57,6 +72,8 @@ public:
 	{
 		// GPU callback
 		core_.getGPU()->setRenderCallback(std::bind(&QGameboyCore::gpuCallback, this, std::placeholders::_1, std::placeholders::_2));
+		// Link callback
+		core_.getLink()->setReadyCallback(std::bind(&QGameboyCore::linkCallback, this, std::placeholders::_1, std::placeholders::_2));
 	}
 
 	void load(const QString& rom_file_name, const QString& save_file_name)
