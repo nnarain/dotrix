@@ -50,7 +50,7 @@ void MainWindow::openFile()
 		was_running = true;
 	}
 
-	auto filename = QFileDialog::getOpenFileName(this, tr("Open ROM"), "", tr("ROM (*.gb)"));
+	auto filename = QFileDialog::getOpenFileName(this, tr("Open ROM"), "", tr("ROM (*.gb *.gbc)"));
 	
 	// check for content
 	auto valid_rom = false;
