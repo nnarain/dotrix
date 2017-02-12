@@ -25,10 +25,12 @@ before_build:
   - nmake install
   - set PATH=%PATH%;c:\libs\gameboycore
 
+  - cd c:\projects\dotrix\ && mkdir build && cd build
+  - git clone --depth=1 https://github.com/nnarain/vc_redist.git
+
 build_script:
-  - cd c:\projects\dotrix
-  - mkdir build && cd build
-  - cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release
+  - cd c:\projects\dotrix\build
+  - cmake .. -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DVC_REDIST_PATH=c:\projects\dotrix\build\vc_redist\2015 -DVC_REDIST_NAME=vc_redist.x64.exe
   - nmake
 
 after_build:
