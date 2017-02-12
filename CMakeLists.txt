@@ -51,11 +51,11 @@ set(HEADERS
     include/mainwindow.h
 	include/network_settings.h
 	include/screen.h
-	
+
 	include/emu/qgameboycore.h
 	include/emu/core_updater.h
 	include/emu/input.h
-	
+
 	include/net/lan_manager.h
 	include/net/discover_server.h
 	include/net/discover_client.h
@@ -99,6 +99,15 @@ if(WIN32)
             ${GAMEBOYCORE_BIN_DIR}/gameboycore.dll
         DESTINATION bin
     )
+
+    if(DEFINED VC_REDIST_PATH)
+        message("${VC_REDIST_PATH}/${VC_REDIST_NAME}")
+        install(
+            PROGRAMS
+                "${VC_REDIST_PATH}\\${VC_REDIST_NAME}"
+            DESTINATION tmp
+        )
+    endif(DEFINED VC_REDIST_PATH)
 endif(WIN32)
 
 # package
@@ -115,5 +124,10 @@ set(CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${VERSION_PATCH}")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Dotrix")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
+
+if(DEFINED VC_REDIST_PATH)
+    list(APPEND CPACK_NSIS_EXTRA_INSTALL_COMMANDS "ExecWait $INSTDIR\\\\tmp\\\\${VC_REDIST_NAME}")
+    string (REPLACE ";" "\n" CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}")
+endif(DEFINED VC_REDIST_PATH)
 
 include(CPack)
