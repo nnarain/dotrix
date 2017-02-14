@@ -96,6 +96,7 @@ if(WIN32)
             ${QT_BIN}/Qt5Widgets.dll
             ${QT_BIN}/Qt5Gui.dll
 			${QT_BIN}/Qt5Network.dll
+            ${QT_BIN}/libEGL.dll
             ${GAMEBOYCORE_BIN_DIR}/gameboycore.dll
         DESTINATION bin
     )
